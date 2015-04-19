@@ -1,0 +1,15 @@
+for(int i = 0;i < 73;i++)
+							for(int j = 0;j < 272;j ++)
+							{
+								for(int k = 0;k < t->listTitle.size();k++)
+								{
+									if(t->mapTitle[i][j] == t->listTitle.at(k)->id)
+									{
+										t->listTitle.at(k)->x = j*16 ;
+										t->listTitle.at(k)->y = 73*16 - i*16;
+										t->listTitle.at(k)->Render(sprite_handle,Cam);
+									}
+								}
+							}
+							
+							Rockman->Render(sprite_handle, Cam);
