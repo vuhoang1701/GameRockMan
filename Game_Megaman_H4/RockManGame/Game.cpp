@@ -180,6 +180,11 @@ void CGame::Game_Run()
 {
 	MSG msg;
 	int done = 0;
+	float tickPerFrame = 1.0f / FRAME_RATE;
+	__int64 cntsPerSec = 0;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
+	float secsPerCnt = 1.0f / (float)cntsPerSec;
+	__int64 prevTimeStamp = 0;
 	   while(!done)
 		{
 			
@@ -196,13 +201,22 @@ void CGame::Game_Run()
 				HRESULT hr = d3ddev->BeginScene();
 				if(SUCCEEDED(hr))
 					{
-						float now = GetTickCount();
-						d3ddev->Clear(0,NULL,D3DCLEAR_TARGET,D3DCOLOR_XRGB(0,255,255),1,0);
-						D3DXVECTOR3 pos = Cam->GetPointTransform(0,224);
-						sprite_handle->Begin(D3DXSPRITE_ALPHABLEND);
-						rm->Update(Cam, now);
-						collisionManager->CheckForRockMan(rm,listObjectDemo,now);
-						Cam->Check(t->mapTitle, rm->_Dir);
+						__int64 currTimeStamp = 0;
+						QueryPerformanceCounter((LARGE_INTEGER*)&currTimeStamp);
+						float deltaTime = (currTimeStamp - prevTimeStamp)*secsPerCnt;
+						if (deltaTime >= tickPerFrame)
+						{
+							//frameStart = now;
+							prevTimeStamp = currTimeStamp;
+							//float delta_time = (float)deltaTime / 1000;
+							if(deltaTime > tickPerFrame)
+								deltaTime = tickPerFrame;
+							d3ddev->Clear(0,NULL,D3DCLEAR_TARGET,D3DCOLOR_XRGB(0,255,255),1,0);
+							D3DXVECTOR3 pos = Cam->GetPointTransform(0,224);
+							sprite_handle->Begin(D3DXSPRITE_ALPHABLEND);
+							rm->Update(Cam, deltaTime);
+							collisionManager->CheckForRockMan(rm,listObjectDemo,deltaTime);
+							Cam->Check(t->mapTitle, rm->_Dir);
 						/*for(int i = 73 - Cam->_pos.y/16 ;i <= 73 - (Cam->_pos.y - Cam->_height)/16 + 1 ; ++i)
 							for(int j = Cam->_pos.x/16 -1;j <=(Cam->_pos.x + Cam->_width)/16 + 1;j ++)
 							{
@@ -216,13 +230,13 @@ void CGame::Game_Run()
 									}
 								}
 							}*/
-							for (int i = 0; i < listObjectDemo.size();++i)
-							{
-								listObjectDemo[i]->Render(sprite_handle,Cam);
-							}
-					rm->Render(sprite_handle, Cam);
-					sprite_handle->End();
-						
+								for (int i = 0; i < listObjectDemo.size();++i)
+								{
+									listObjectDemo[i]->Render(sprite_handle,Cam);
+								}
+						rm->Render(sprite_handle, Cam);
+						sprite_handle->End();
+						}
 						
 					}
 				

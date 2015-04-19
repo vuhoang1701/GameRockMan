@@ -11,17 +11,13 @@ class ColManager
 {
 public:
 
-	RECT GetSweptBroadphaseBox(CGameObj* b, float t)
+	RECT GetSweptBroadphaseBox(CGameObj* b, float deltaTime)
 	{
 		RECT broadphasebox;
-		/*broadphasebox.left = b->_Vx > 0 ? b->_Bound.left  : b->_Bound.left + b->_Vx*t ;
-		broadphasebox.top = b->_Vy > 0 ? b->_Bound.top : b->_Bound.top + b->_Vy*t ;
-		broadphasebox.right = (b->_Vx > 0 ? b->_Vx*t + b->_Bound.right  : b->_Bound.right - b->_Vx*t )  ;
-		broadphasebox.bottom =  (b->_Vy  > 0 ?   b->_Bound.bottom - b->_Vy*t : b->_Bound.bottom + b->_Vy*t );*/
-		broadphasebox.left = b->_Vx > 0 ? b->_Bound.left  : b->_Bound.left + b->_Vx ;
-		broadphasebox.top = b->_Vy > 0 ? b->_Bound.top : b->_Bound.top + b->_Vy ;
-		broadphasebox.right = (b->_Vx > 0 ? b->_Vx + b->_Bound.right  : b->_Bound.right - b->_Vx )  ;
-		broadphasebox.bottom =  (b->_Vy  > 0 ?   b->_Bound.bottom - b->_Vy : b->_Bound.bottom + b->_Vy );
+		broadphasebox.left = b->_Vx > 0 ? b->_Vx * deltaTime + b->GetBound()->left : b->GetBound()->left;
+		broadphasebox.top = b->_Vy > 0 ? b->_Vy * deltaTime + b->GetBound()->top : b->GetBound()->top;
+		broadphasebox.right = b->_Vx > 0 ? b->_Vx * deltaTime + b->GetBound()->right : b->GetBound()->right;
+		broadphasebox.bottom = b->_Vy > 0 ? b->_Vy * deltaTime + b->GetBound()->bottom : b->GetBound()->bottom;
 		return broadphasebox;
 	}
 	bool AABBCheck(RECT b1, RECT b2)

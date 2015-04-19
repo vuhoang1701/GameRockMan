@@ -10,10 +10,12 @@
 using namespace std;
 #define SCREEN_HEIGHT 224
 #define SCREEN_WIDTH 256
+#define FRAME_RATE 60
 #define NAME "ROCKMAN GAME"
 class CGame
 { 
 private:
+	
 	Input* _input;
 	CObjectManager* collisionManager;
 	vector<CGameObj*> listObjectDemo;

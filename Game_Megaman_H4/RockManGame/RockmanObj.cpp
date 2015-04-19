@@ -35,13 +35,11 @@ D3DXVECTOR2 CRockmanObj::GetVeloc()
 	D3DXVECTOR2 a(this->_Vx, this->_Vy);
 	return a;
 }
-void CRockmanObj::Update(CCamera *Cam, float time)
+void CRockmanObj::Update(CCamera *Cam, float deltatime)
 {
 	_input->Update();
-	float deltatime = (time - timerun);
-	if(deltatime > 30)
-	{
-		timerun = time;
+
+		
 		if(onGround)
 			_Vy = 0;
 		else
@@ -51,7 +49,7 @@ void CRockmanObj::Update(CCamera *Cam, float time)
 		_Pos.y += _Vy;		
 		ProcessInput(deltatime);
 		UpdatePosition(Cam,deltatime);
-	}
+	
 
 
 	
